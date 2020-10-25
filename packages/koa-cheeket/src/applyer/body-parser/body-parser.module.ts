@@ -1,5 +1,6 @@
 import { Container } from "cheeket";
 import asSingleton from "cheeket/dist/provider/as-singleton";
+import { autoInjected } from "@cheeket/injector";
 import BodyParserApplier from "./body-parser.applier";
 import ApplicationApplier from "../applier-core/application.applier";
 import ApplierCoreModule from "../applier-core/applier-core.module";
@@ -15,13 +16,15 @@ class BodyParserModule extends ContainerModule {
   async configured(container: Container): Promise<void> {
     await super.configured(container);
 
-    const applicationApplier = await this.resolveOrThrow(ApplicationApplier);
+    const applicationApplier: ApplicationApplier = await this.resolve(
+      ApplicationApplier
+    );
 
-    applicationApplier.register(await this.resolveOrThrow(BodyParserApplier));
+    applicationApplier.register(await this.resolve(BodyParserApplier));
   }
 
   configuredInjection(): void {
-    this.bind(BodyParserApplier).to(asSingleton(() => new BodyParserApplier()));
+    this.bind(BodyParserApplier, asSingleton(autoInjected(BodyParserApplier)));
   }
 }
 

@@ -1,6 +1,7 @@
 import asSingleton from "cheeket/dist/provider/as-singleton";
 import Application from "koa";
 import Container from "cheeket";
+import { autoInjected } from "@cheeket/injector";
 import ApplicationApplier from "./application.applier";
 import ContainerModule from "../../module-core/container.module";
 
@@ -12,14 +13,17 @@ class ApplierCoreModule extends ContainerModule {
   }
 
   configuredInjection(): void {
-    this.bind(ApplicationApplier).to(
-      asSingleton(() => new ApplicationApplier())
+    this.bind(
+      ApplicationApplier,
+      asSingleton(autoInjected(ApplicationApplier))
     );
   }
 
   async onPreStart(container: Container): Promise<void> {
-    const application = await container.resolveOrThrow(Application);
-    const applicationApplier = await this.resolveOrThrow(ApplicationApplier);
+    const application: Application = await container.resolve(Application);
+    const applicationApplier: ApplicationApplier = await this.resolve(
+      ApplicationApplier
+    );
 
     applicationApplier.apply(application);
   }

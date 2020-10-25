@@ -1,9 +1,15 @@
 import Application from "koa";
-import TodoRepository from "../database/repository/todo.repository";
+import { inject, injectable } from "@cheeket/injector";
+import TodoRepository, {
+  token as TodoRepositoryToken,
+} from "../database/repository/todo.repository";
 import Todo from "../entity/todo";
 
+@injectable()
 class TodoHandler {
-  constructor(private readonly todoRepository: TodoRepository) {}
+  constructor(
+    @inject(TodoRepositoryToken) private readonly todoRepository: TodoRepository
+  ) {}
 
   async post(
     { request, response }: Application.DefaultState,

@@ -22,42 +22,42 @@ class RouterModule extends ContainerModule {
   async configured(container: Container): Promise<void> {
     await super.configured(container);
 
-    const applicationApplier = await this.resolveOrThrow(ApplicationApplier);
-    applicationApplier.register(await this.resolveOrThrow(RouterApplier));
+    const applicationApplier: ApplicationApplier = await this.resolve(
+      ApplicationApplier
+    );
+    applicationApplier.register(await this.resolve(RouterApplier));
   }
 
   configuredInjection(): void {
-    this.bind(rootRouter.token)
-      .to(
-        asSingleton(async (lookUp) =>
-          rootRouter.getRouter(
-            await lookUp.resolveOrThrow(pingPongRouter.token),
-            await lookUp.resolveOrThrow(todoRouter.token)
-          )
+    this.bind(
+      rootRouter.token,
+      asSingleton(async (lookUp) =>
+        rootRouter.getRouter(
+          await lookUp.resolve(pingPongRouter.token),
+          await lookUp.resolve(todoRouter.token)
         )
       )
-      .inPrivate();
+    );
 
-    this.bind(pingPongRouter.token)
-      .to(
-        asSingleton(async (lookUp) =>
-          pingPongRouter.getRouter(await lookUp.resolveOrThrow(PingPongHandler))
-        )
+    this.bind(
+      pingPongRouter.token,
+      asSingleton(async (lookUp) =>
+        pingPongRouter.getRouter(await lookUp.resolve(PingPongHandler))
       )
-      .inPrivate();
+    );
 
-    this.bind(todoRouter.token)
-      .to(
-        asSingleton(async (lookUp) =>
-          todoRouter.getRouter(await lookUp.resolveOrThrow(TodoHandler))
-        )
+    this.bind(
+      todoRouter.token,
+      asSingleton(async (lookUp) =>
+        todoRouter.getRouter(await lookUp.resolve(TodoHandler))
       )
-      .inPrivate();
+    );
 
-    this.bind(RouterApplier).to(
+    this.bind(
+      RouterApplier,
       asSingleton(
         async (lookUp) =>
-          new RouterApplier(await lookUp.resolveOrThrow(rootRouter.token))
+          new RouterApplier(await lookUp.resolve(rootRouter.token))
       )
     );
   }

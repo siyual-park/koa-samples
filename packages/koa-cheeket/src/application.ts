@@ -8,7 +8,7 @@ class Application extends KoaApplication {
 
   constructor(private readonly rootContainer = new Container()) {
     super();
-    this.rootContainer.bind(KoaApplication).to(() => this);
+    this.rootContainer.bind(KoaApplication, () => this);
   }
 
   async start(port?: number): Promise<Server> {

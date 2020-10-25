@@ -14,13 +14,13 @@ abstract class ContainerModule
   }
 
   async configured(container: Container): Promise<void> {
-    container.imports(this);
-    container.bind(this.token).to(() => this);
+    container.import(this);
+    container.bind(this.token, () => this);
 
     await Promise.all(
       this.importIds.map(async (token) => {
-        const dependencyContainer = await container.resolveOrThrow(token);
-        this.imports(dependencyContainer);
+        const dependencyContainer: Container = await container.resolve(token);
+        this.import(dependencyContainer);
       })
     );
   }

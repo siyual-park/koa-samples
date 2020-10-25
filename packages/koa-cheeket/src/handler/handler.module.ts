@@ -1,9 +1,9 @@
 import asSingleton from "cheeket/dist/provider/as-singleton";
+import { autoInjected } from "@cheeket/injector";
 import PingPongHandler from "./ping-pong.handler";
 import ContainerModule from "../module-core/container.module";
 import TodoHandler from "./todo.handler";
 import RepositoryModule from "../database/repository/repository.module";
-import * as TodoRepository from "../database/repository/todo.repository";
 
 class HandlerModule extends ContainerModule {
   static readonly Token = Symbol("HandlerModule");
@@ -13,14 +13,8 @@ class HandlerModule extends ContainerModule {
   }
 
   configuredInjection(): void {
-    this.bind(PingPongHandler).to(asSingleton(() => new PingPongHandler()));
-
-    this.bind(TodoHandler).to(
-      asSingleton(
-        async (lookUp) =>
-          new TodoHandler(await lookUp.resolveOrThrow(TodoRepository.token))
-      )
-    );
+    this.bind(PingPongHandler, asSingleton(autoInjected(PingPongHandler)));
+    this.bind(TodoHandler, asSingleton(autoInjected(TodoHandler)));
   }
 }
 

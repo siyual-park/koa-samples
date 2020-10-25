@@ -34,7 +34,8 @@
   },
   "types": "dist/index.d.ts",
   "dependencies": {
-    "cheeket": "^1.0.0-alpha.1",
+    "@cheeket/injector": "^1.0.2",
+    "cheeket": "^1.0.0",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^9.4.0",

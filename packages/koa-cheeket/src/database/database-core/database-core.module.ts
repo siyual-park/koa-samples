@@ -12,24 +12,25 @@ class DatabaseCoreModule extends ContainerModule {
   }
 
   configuredInjection(): void {
-    this.bind(DatabaseConnectionOptionsProvider).to(
+    this.bind(
+      DatabaseConnectionOptionsProvider,
       asSingleton(() => new DatabaseConnectionOptionsProvider())
     );
 
-    this.bind(DatabaseConnectionProvider).to(
+    this.bind(
+      DatabaseConnectionProvider,
       asSingleton(
         async (lookUp) =>
           new DatabaseConnectionProvider(
-            (
-              await lookUp.resolveOrThrow(DatabaseConnectionOptionsProvider)
-            ).get()
+            (await lookUp.resolve(DatabaseConnectionOptionsProvider)).get()
           )
       )
     );
 
-    this.bind(Connection).to(
+    this.bind(
+      Connection,
       asSingleton(async (lookUp) =>
-        (await lookUp.resolveOrThrow(DatabaseConnectionProvider)).get()
+        (await lookUp.resolve(DatabaseConnectionProvider)).get()
       )
     );
   }

@@ -1,4 +1,5 @@
 import "reflect-metadata";
+
 import { Server } from "net";
 import Application from "./application";
 import ApplicationModule from "./application.module";

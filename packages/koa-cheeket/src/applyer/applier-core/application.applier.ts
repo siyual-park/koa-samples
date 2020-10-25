@@ -1,6 +1,8 @@
 import Application from "koa";
+import { injectable } from "@cheeket/injector";
 import Applier from "./applier";
 
+@injectable()
 class ApplicationApplier implements Applier {
   private readonly appliers = new Set<Applier>();
 
