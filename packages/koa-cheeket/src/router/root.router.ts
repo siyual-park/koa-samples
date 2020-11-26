@@ -1,13 +1,12 @@
-import Router from "koa-router";
+import Router, { RouterContext } from "koa-router";
+import { ContainerContext } from "@cheeket/koa";
 
-function getRouter(pingPongRoute: Router, todoRoute: Router): Router {
-  const router = new Router();
+import pingPongRouter from "./ping-pong.router";
+import todoRouter from "./todo.router";
 
-  router.use(pingPongRoute.routes());
-  router.use(todoRoute.routes());
+const router = new Router<never, ContainerContext & RouterContext>();
 
-  return router;
-}
+router.use(pingPongRouter.routes());
+router.use(todoRouter.routes());
 
-const token = Symbol("root-router");
-export default { getRouter, token };
+export default router;

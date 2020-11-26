@@ -1,13 +1,11 @@
-import Router from "koa-router";
-import PingPongHandler from "../handler/ping-pong.handler";
+import Router, { RouterContext } from "koa-router";
+import { ContainerContext } from "@cheeket/koa";
 
-function getRouter(pingPoneHandler: PingPongHandler): Router {
-  const router = new Router();
+import pingPongMiddleware from "../middleware/ping-pong.middleware";
 
-  router.post("/ping", pingPoneHandler.post);
+const router = new Router<never, ContainerContext & RouterContext>();
+router.prefix("/ping");
 
-  return router;
-}
+router.post("/", pingPongMiddleware);
 
-const token = Symbol("ping-pong-router");
-export default { getRouter, token };
+export default router;
